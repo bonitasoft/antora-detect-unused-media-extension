@@ -4,6 +4,7 @@
 
 The Antora Detect Unused Media Extension are intended to be used with Antora. Be sure to register them as Antora extensions in your playbook, not as AsciiDoc extensions.
 
+WARNING: This repository is work in progress and is not yet ready for production use.
 
 == Overview
 
