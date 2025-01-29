@@ -22,7 +22,6 @@
       "require": "./dist/cjs/index.js"
     }
   },
-
   "keywords": [
     "antora",
     "extension",

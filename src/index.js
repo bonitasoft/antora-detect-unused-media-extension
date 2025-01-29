@@ -47,73 +47,72 @@ export function register({ config }) {
       );
     }
   });
+}
 
-  function extractImageReferences(contentCatalog, logger) {
-    const imageReferences = new Set();
+export function extractImageReferences(contentCatalog, logger) {
+  const imageReferences = new Set();
 
-    contentCatalog
-      .getFiles()
-      .filter((file) => file.src.family === "page")
-      .forEach((file) => {
-        try {
-          if (file.contents) {
-            const imageMatches =
-              file.contents.toString().match(/(image|video)::?([^[]+)/g) || [];
-            imageMatches.forEach((match) => {
-              const imagePath = match.replace(/(image|video)::?/g, "").trim();
-              imageReferences.add(imagePath);
-            });
-          }
-        } catch (error) {
-          logger.fatal(
-            "%s (%s) - %s",
-            file.src.component,
-            file.src.version,
-            file.src.basename,
-          );
-          logger.fatal(error);
+  contentCatalog
+    .getFiles()
+    .filter((file) => file.src.family === "page")
+    .forEach((file) => {
+      try {
+        if (file.contents) {
+          const imageMatches =
+            file.contents.toString().match(/(image|video)::?([^[]+)/g) || [];
+          imageMatches.forEach((match) => {
+            const imagePath = match.replace(/(image|video)::?/g, "").trim();
+            imageReferences.add(imagePath);
+          });
         }
-      });
+      } catch (error) {
+        logger.fatal(
+          "%s (%s) - %s",
+          file.src.component,
+          file.src.version,
+          file.src.basename,
+        );
+        logger.fatal(error);
+      }
+    });
 
-    logger.info("Found %s images references", imageReferences.size);
-    return imageReferences;
-  }
+  logger.info("Found %s images references", imageReferences.size);
+  return imageReferences;
+}
 
-  function findUnusedImages(
-    contentCatalog,
-    imageReferences,
-    extensionToIgnore,
-    logger,
-  ) {
-    const unusedImages = new Set();
-    contentCatalog
-      .getFiles()
-      .filter(
-        (file) =>
-          file.src.family === "image" &&
-          !extensionToIgnore.has(file.src.extname),
-      )
-      .forEach((img) => {
-        // check if the media are used in the module or in an external
-        // ex: ROOT:images/myImage.png or images:myImages.png
-        if (
-          !(
-            imageReferences.has(img.src.relative.toString()) ||
-            imageReferences.has(
-              img.src.module + ":" + img.src.relative.toString(),
-            )
+export function findUnusedImages(
+  contentCatalog,
+  imageReferences,
+  extensionToIgnore,
+  logger,
+) {
+  const unusedImages = new Set();
+  contentCatalog
+    .getFiles()
+    .filter(
+      (file) =>
+        file.src.family === "image" && !extensionToIgnore.has(file.src.extname),
+    )
+    .forEach((img) => {
+      // check if the media are used in the module or in an external
+      // ex: ROOT:images/myImage.png or images:myImages.png
+      if (
+        !(
+          imageReferences.has(img.src.relative.toString()) ||
+          imageReferences.has(
+            img.src.module + ":" + img.src.relative.toString(),
           )
-        ) {
-          unusedImages.add(img);
-          logger.warn(
-            "[%s] [%s] %s",
-            img.src.component,
-            img.src.version,
-            img.src.path,
-          );
-        }
-      });
-    logger.info("Finish and detecting %s unused images", unusedImages.size);
-    return unusedImages;
-  }
+        )
+      ) {
+        unusedImages.add(img);
+        logger.warn(
+          "[%s] [%s] %s",
+          img.src.component,
+          img.src.version,
+          img.src.path,
+        );
+      }
+    });
+  logger.info("Finish and detecting %s unused images", unusedImages.size);
+  return unusedImages;
 }
