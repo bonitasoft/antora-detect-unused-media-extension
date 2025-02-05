@@ -8,7 +8,7 @@
     "build": "npm run lint && npm run test && npm run build:js",
     "lint": "eslint src tests",
     "lint:fix": "eslint --fix src tests",
-    "test": "node --test",
+    "test": "node --test --test-reporter spec --test-reporter-destination stdout --test-reporter node-test-github-reporter --test-reporter-destination stdout",
     "test:watch": "node --test --watch",
     "test:cov": "node --test --experimental-test-coverage",
     "prepack": "npm run build",
@@ -36,6 +36,7 @@
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
     "globals": "^15.14.0",
+    "node-test-github-reporter": "^1.2.0",
     "nyc": "^17.1.0",
     "prettier": "^3.4.2",
     "prettier-eslint": "^16.3.0"
