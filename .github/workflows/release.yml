@@ -15,6 +15,10 @@ jobs:
       contents: write
 
     steps:
+      - name: 🔧 Git Setup
+        uses: bonitasoft/git-setup-action@v1
+        with:
+          keeper-secret-config: ${{ secrets.KSM_CONFIG }}
       - run: |
           echo "New version type: ${{ inputs.type }}"
       - uses: actions/checkout@v4
@@ -27,11 +31,7 @@ jobs:
 
       - name: Build
         run: npm run build
-      - name: Config git
-        run: |
-          git config --local user.email "${{ github.actor }}@users.noreply.github.com"
-          git config --local user.name "${{ github.actor }}"
-          git config pull.rebase true
+
       - name: Checkout main
         run: git checkout main && git pull --tags
       - name: Bump Version
