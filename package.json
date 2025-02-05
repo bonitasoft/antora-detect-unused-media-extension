@@ -1,6 +1,6 @@
 {
   "name": "@bonitasoft/antora-detect-unused-media-extension",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "type": "module",
   "description": "Antora extension to detect unused media files in a Antora project.",
   "scripts": {
@@ -21,7 +21,10 @@
       "require": "./lib/cjs/index.js"
     }
   },
-  "files": ["lib/*", "README.adoc"],
+  "files": [
+    "lib/*",
+    "README.adoc"
+  ],
   "keywords": [
     "antora",
     "extension",
