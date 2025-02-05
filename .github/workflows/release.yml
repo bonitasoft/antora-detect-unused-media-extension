@@ -1,0 +1,41 @@
+
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      type:
+        description: 'New version type [new-version | major | minor | patch]'
+        required: true
+        default: 'patch'
+jobs:
+  bumpVersion:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+
+    steps:
+      - run: |
+          echo "New version type: ${{ inputs.type }}"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+      - name: Config git
+        run: |
+          git config --local user.email "${{ github.actor }}@users.noreply.github.com"
+          git config --local user.name "${{ github.actor }}"
+          git config pull.rebase true
+      - name: Checkout main
+        run: git checkout main && git pull --tags
+      - name: Bump Version
+        run: |
+          npm version ${{ inputs.type }} --no-commit-hooks --message "chore(release): %s"
+      - name: Push Version
+        run: git push && git push --tags
