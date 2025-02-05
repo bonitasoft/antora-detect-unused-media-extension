@@ -22,6 +22,10 @@ jobs:
       - run: |
           echo "New version type: ${{ inputs.type }}"
       - uses: actions/checkout@v4
+        with:
+          # Use a PAT to ensure workflow run are triggered after git push
+          token: ${{ secrets.BONITA_CI_PAT }}
+
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
