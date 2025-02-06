@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "type": "module",
   "description": "Antora extension to detect unused media files in a Antora project.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bonitasoft/antora-detect-unused-media-extension"
+  },
   "scripts": {
     "build:js": "rm -fr lib/* && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json && ./fixup.sh",
     "build": "npm run lint && npm run test && npm run build:js",
