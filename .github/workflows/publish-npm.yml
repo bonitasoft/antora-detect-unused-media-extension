@@ -32,3 +32,14 @@ jobs:
         run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  githubRelease:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write # create the GH release
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        with:
+          generateReleaseNotes: true
+          token: ${{ secrets.GITHUB_TOKEN }}
