@@ -27,7 +27,7 @@
   },
   "files": [
     "lib/*",
-    "README.adoc"
+    "README.md"
   ],
   "keywords": [
     "antora",
