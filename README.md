@@ -2,8 +2,6 @@
 
 The Antora Detect Unused Media Extension is intended to be used with Antora. Be sure to register it as an Antora extension in your playbook, not as an AsciiDoc extension.
 
-**WARNING:** This repository is a work in progress and is not yet ready for production use.
-
 ## Overview
 
 This extension checks if media assets (located in `assets/images`) are referenced in the `.adoc` content with `image:` or `video:`.
