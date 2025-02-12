@@ -1,14 +1,14 @@
 import { strict as assert } from "node:assert"; // Importing assert
 import { beforeEach, describe, it } from "node:test";
 import {
-  extractImageReferences,
-  findUnusedImages,
+  extractMediaReferences,
+  findUnusedMedia,
   register,
 } from "../src/index.js";
 import { createLogger } from "./lib.js";
 
-describe("extractImageReferences", async () => {
-  it("should extract image references from one file", () => {
+describe("extractMediaReferences", async () => {
+  it("should extract media references from one file", () => {
     const logger = createLogger();
     const contentCatalog = {
       getFiles: () => [
@@ -20,7 +20,7 @@ describe("extractImageReferences", async () => {
       ],
     };
 
-    const imageReferences = extractImageReferences(contentCatalog, logger);
+    const imageReferences = extractMediaReferences(contentCatalog, logger);
 
     assert.strictEqual(imageReferences.size, 3);
     assert.strictEqual(imageReferences.has("path/to/image1.png"), true);
@@ -28,7 +28,7 @@ describe("extractImageReferences", async () => {
     assert.strictEqual(imageReferences.has("component:modules/cat.gif"), true);
   });
 
-  it("should extract image references from multiple files", () => {
+  it("should extract media references from multiple files", () => {
     const logger = createLogger();
     const contentCatalog = {
       getFiles: () => [
@@ -41,12 +41,36 @@ describe("extractImageReferences", async () => {
       ],
     };
 
-    const imageReferences = extractImageReferences(contentCatalog, logger);
+    const imageReferences = extractMediaReferences(contentCatalog, logger);
 
     assert.strictEqual(imageReferences.size, 3);
     assert.strictEqual(imageReferences.has("path/to/image1.png"), true);
     assert.strictEqual(imageReferences.has("path/to/image2.cast"), true);
     assert.strictEqual(imageReferences.has("component:modules/cat.gif"), true);
+  });
+
+  it("should extract media references from file and partial", () => {
+    const logger = createLogger();
+    const contentCatalog = {
+      getFiles: () => [
+        {
+          src: { family: "page" },
+          contents:
+            "image::path/to/image1.png[] \n \n image:component:modules/cat.gif[]",
+        },
+        {
+          src: { family: "partial" },
+          contents: "Load a .cast in the partial image::path/to/image2.cast[]",
+        },
+      ],
+    };
+
+    const mediaReferences = extractMediaReferences(contentCatalog, logger);
+
+    assert.strictEqual(mediaReferences.size, 3);
+    assert.strictEqual(mediaReferences.has("path/to/image1.png"), true);
+    assert.strictEqual(mediaReferences.has("path/to/image2.cast"), true);
+    assert.strictEqual(mediaReferences.has("component:modules/cat.gif"), true);
   });
 });
 
@@ -61,7 +85,7 @@ describe("findUnusedImages", () => {
     logger = createLogger();
   });
 
-  it("returns unused images when there are images not referenced", () => {
+  it("returns unused media when there are media not referenced", () => {
     contentCatalog.getFiles = () => [
       {
         src: {
@@ -85,12 +109,12 @@ describe("findUnusedImages", () => {
       },
     ];
 
-    const imageReferences = new Set(["images/img1.png"]);
+    const mediaReferences = new Set(["images/img1.png"]);
     const extensionToIgnore = new Set([".cast"]);
 
-    const result = findUnusedImages(
+    const result = findUnusedMedia(
       contentCatalog,
-      imageReferences,
+      mediaReferences,
       extensionToIgnore,
       logger,
     );
@@ -112,7 +136,7 @@ describe("findUnusedImages", () => {
 });
 
 describe("Extension should", () => {
-  it("register function should log unused images", () => {
+  it("register function should log unused media", () => {
     const logger = createLogger();
 
     const context = {
@@ -143,10 +167,10 @@ describe("Extension should", () => {
     // Add assertion
     assert.strictEqual(
       logger.messages.warn.includes(
-        "Some images are unused, check previous logs and delete unused images.",
+        "Some media are unused, check previous logs and delete unused media.",
       ),
       true,
-      "Logger should warn about unused images",
+      "Logger should warn about unused media",
     );
   });
 });

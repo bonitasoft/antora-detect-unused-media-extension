@@ -32,37 +32,38 @@ export function register({ config }) {
       Array.from(extensionToIgnore),
     );
 
-    const imageReferences = extractImageReferences(contentCatalog, logger);
+    const imageReferences = extractMediaReferences(contentCatalog, logger);
 
-    const unusedImages = findUnusedImages(
+    const unusedMedia = findUnusedMedia(
       contentCatalog,
       imageReferences,
       extensionToIgnore,
       logger,
     );
 
-    if (unusedImages.size > 0) {
+    if (unusedMedia.size > 0) {
       logger.warn(
-        "Some images are unused, check previous logs and delete unused images.",
+        "Some media are unused, check previous logs and delete unused media.",
       );
     }
   });
 }
 
-export function extractImageReferences(contentCatalog, logger) {
-  const imageReferences = new Set();
+export function extractMediaReferences(contentCatalog, logger) {
+  const mediaReferences = new Set();
+  const families = ["page", "partial"];
 
   contentCatalog
     .getFiles()
-    .filter((file) => file.src.family === "page")
+    .filter((file) => families.includes(file.src.family))
     .forEach((file) => {
       try {
         if (file.contents) {
-          const imageMatches =
+          const mediaMatches =
             file.contents.toString().match(/(image|video)::?([^[]+)/g) || [];
-          imageMatches.forEach((match) => {
+          mediaMatches.forEach((match) => {
             const imagePath = match.replace(/(image|video)::?/g, "").trim();
-            imageReferences.add(imagePath);
+            mediaReferences.add(imagePath);
           });
         }
       } catch (error) {
@@ -76,17 +77,17 @@ export function extractImageReferences(contentCatalog, logger) {
       }
     });
 
-  logger.info("Found %s images references", imageReferences.size);
-  return imageReferences;
+  logger.info("Found %s media references", mediaReferences.size);
+  return mediaReferences;
 }
 
-export function findUnusedImages(
+export function findUnusedMedia(
   contentCatalog,
-  imageReferences,
+  mediaReferences,
   extensionToIgnore,
   logger,
 ) {
-  const unusedImages = new Set();
+  const unusedMedia = new Set();
   contentCatalog
     .getFiles()
     .filter(
@@ -98,13 +99,13 @@ export function findUnusedImages(
       // ex: ROOT:images/myImage.png or images:myImages.png
       if (
         !(
-          imageReferences.has(img.src.relative.toString()) ||
-          imageReferences.has(
+          mediaReferences.has(img.src.relative.toString()) ||
+          mediaReferences.has(
             img.src.module + ":" + img.src.relative.toString(),
           )
         )
       ) {
-        unusedImages.add(img);
+        unusedMedia.add(img);
         logger.warn(
           "[%s] [%s] %s",
           img.src.component,
@@ -113,6 +114,6 @@ export function findUnusedImages(
         );
       }
     });
-  logger.info("Finish and detecting %s unused images", unusedImages.size);
-  return unusedImages;
+  logger.info("Finish and detecting %s unused media", unusedMedia.size);
+  return unusedMedia;
 }
