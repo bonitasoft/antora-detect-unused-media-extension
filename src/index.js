@@ -1,12 +1,12 @@
 /**
- * Registers the detect-unused-images extension.
+ * Registers the detect-unused-media extension.
  *
  * @param {Object} config - The configuration object.
  * @param {Array<string>} [config.excludeimageextension] - List of image extensions to exclude from detection.
  */
 export function register({ config }) {
   const logger = this.getLogger("detect-unused-media");
-  logger.info("Start unused images detection");
+  logger.info("Starting detection of unused media...");
 
   config && Object.keys(config).length
     ? logger.info(
@@ -41,6 +41,7 @@ export function register({ config }) {
       logger,
     );
 
+    logger.info("Detection of unused media is now complete.");
     if (unusedMedia.size > 0) {
       logger.warn(
         "Some media are unused, check previous logs and delete unused media.",
