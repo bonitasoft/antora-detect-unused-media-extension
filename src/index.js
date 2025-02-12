@@ -5,7 +5,7 @@
  * @param {Array<string>} [config.excludeimageextension] - List of image extensions to exclude from detection.
  */
 export function register({ config }) {
-  const logger = this.getLogger("detect-unused-images");
+  const logger = this.getLogger("detect-unused-media");
   logger.info("Start unused images detection");
 
   config && Object.keys(config).length
