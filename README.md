@@ -1,6 +1,4 @@
 # Detect Unused Media Extension
-:url-antora-docs: https://docs.antora.org/antora/latest/
-:url-extension-docs: https://docs.antora.org/antora/latest/extend/extensions/
 
 The Antora Detect Unused Media Extension is intended to be used with Antora. Be sure to register it as an Antora extension in your playbook, not as an AsciiDoc extension.
 
@@ -35,7 +33,7 @@ If this key doesn't yet exist in your playbook, first create it.
 antora:
   extensions:
   - require: '@bonitasoft/antora-detect-unused-media-extension'
-  excludeImageExtension:  ['.png', 'gif']
+    excludeImageExtension:  ['.png', 'gif']
 ```
 
 
@@ -49,3 +47,10 @@ You can configure this extension from configuration with attributes:
 **IMPORTANT**
 
 * By default, the `.cast` extension are ignored
+
+
+
+## References
+
+<https://docs.antora.org/antora/latest>
+<https://docs.antora.org/antora/latest/extend/extensions>
