@@ -2,7 +2,7 @@ import { strict as assert } from "node:assert"; // Importing assert
 import { beforeEach, describe, it } from "node:test";
 import {
   extractMediaReferences,
-  findUnusedmedia,
+  findUnusedMedia,
   register,
 } from "../src/index.js";
 import { createLogger } from "./lib.js";
@@ -112,7 +112,7 @@ describe("findUnusedImages", () => {
     const mediaReferences = new Set(["images/img1.png"]);
     const extensionToIgnore = new Set([".cast"]);
 
-    const result = findUnusedmedia(
+    const result = findUnusedMedia(
       contentCatalog,
       mediaReferences,
       extensionToIgnore,

@@ -34,14 +34,14 @@ export function register({ config }) {
 
     const imageReferences = extractMediaReferences(contentCatalog, logger);
 
-    const unusedImages = findUnusedmedia(
+    const unusedMedia = findUnusedMedia(
       contentCatalog,
       imageReferences,
       extensionToIgnore,
       logger,
     );
 
-    if (unusedImages.size > 0) {
+    if (unusedMedia.size > 0) {
       logger.warn(
         "Some media are unused, check previous logs and delete unused media.",
       );
@@ -81,13 +81,13 @@ export function extractMediaReferences(contentCatalog, logger) {
   return mediaReferences;
 }
 
-export function findUnusedmedia(
+export function findUnusedMedia(
   contentCatalog,
   mediaReferences,
   extensionToIgnore,
   logger,
 ) {
-  const unusedmedia = new Set();
+  const unusedMedia = new Set();
   contentCatalog
     .getFiles()
     .filter(
@@ -105,7 +105,7 @@ export function findUnusedmedia(
           )
         )
       ) {
-        unusedmedia.add(img);
+        unusedMedia.add(img);
         logger.warn(
           "[%s] [%s] %s",
           img.src.component,
@@ -114,6 +114,6 @@ export function findUnusedmedia(
         );
       }
     });
-  logger.info("Finish and detecting %s unused media", unusedmedia.size);
-  return unusedmedia;
+  logger.info("Finish and detecting %s unused media", unusedMedia.size);
+  return unusedMedia;
 }
