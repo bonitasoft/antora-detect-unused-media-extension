@@ -21,7 +21,7 @@ jobs:
           keeper-secret-config: ${{ secrets.KSM_CONFIG }}
       - run: |
           echo "New version type: ${{ inputs.type }}"
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           # Use a PAT to ensure workflow run are triggered after git push
           token: ${{ secrets.BONITA_CI_PAT }}
