@@ -15,7 +15,7 @@ jobs:
       - name: Set VERSION
         shell: bash
         run: echo "VERSION=${GITHUB_REF#refs/tags/v*}" >> $GITHUB_ENV
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: actions/setup-node@v6
         with:
@@ -38,7 +38,7 @@ jobs:
     permissions:
       contents: write # create the GH release
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Create release
         uses: ncipollo/release-action@v1
         with:
